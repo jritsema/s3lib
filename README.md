@@ -2,24 +2,31 @@
 
 Just another go library for s3 that makes it a little easier to work with.
 
-
 ### API
 
-- PutObject
-- GetObject
-- DeleteObject
-- List
-- PutContent
-- GetString
-- KeyExists
+#### Utilities
+
+- NewClient
+- NewClientWithSession
+- NewClientWithConfig
 - BucketKeyExists
+- DownloadFile
 - UploadDirectory
 - UploadFile
-- DownloadFile
 - GetPresignedURL
 
+#### Object Persistence
 
-### usage
+- GetObject
+- GetString
+- PutObject
+- DeleteObject
+- PutContent
+- List
+- KeyExists
+
+
+### Usage
 
 ```
 go get github.com/jritsema/s3lib
@@ -48,5 +55,3 @@ check(err)
 err = s3.DeleteObject(key)
 check(err)
 ```
-
-*Note that s3 is eventually consistent and should generally not be used as a database.

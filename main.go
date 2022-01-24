@@ -25,19 +25,33 @@ type Client struct {
 	Region  string
 }
 
-//NewClient creates a new client
-func NewClient(bucket string, region string) (*Client, error) {
+//NewClient creates a new client with a bucket and optional region
+func NewClient(bucket, region string) (*Client, error) {
 
-	sess, err := session.NewSession(&aws.Config{Region: aws.String(region)})
+	c := &aws.Config{}
+	if region != "" {
+		c.Region = aws.String(region)
+	}
+
+	sess, err := session.NewSession(c)
 	if err != nil {
 		return nil, err
 	}
 
-	return NewClientWithSession(sess, bucket), nil
+	return NewClientWithSession(bucket, sess), nil
 }
 
-//NewClientWithSession creates a new client based on a session
-func NewClientWithSession(s *session.Session, bucket string) *Client {
+//NewClientWithConfig creates a new client based on a bucket and config
+func NewClientWithConfig(bucket string, config aws.Config) (*Client, error) {
+	sess, err := session.NewSession(&config)
+	if err != nil {
+		return nil, err
+	}
+	return NewClientWithSession(bucket, sess), nil
+}
+
+//NewClientWithSession creates a new client based on a bucket and a session
+func NewClientWithSession(bucket string, s *session.Session) *Client {
 	return &Client{
 		session: s,
 		svc:     s3.New(s),
